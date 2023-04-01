@@ -30,7 +30,7 @@ localClasses.sort()
 publicClasses.sort()
 prediction_label = ''
 
-
+#APP
 
 from IPython.display import Image, display
 import matplotlib.pyplot as plt
