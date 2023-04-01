@@ -8,11 +8,11 @@ from tensorflow.keras import layers
 from tensorflow.keras import backend as K
 from tensorflow.keras.preprocessing import image
 import tensorflow.keras as keras
-from torchvision import transforms
 import os
 import time
 from PIL import Image,ImageOps
-
+# root='/content/drive/MyDrive/Main_Project/'
+root='./'
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -78,11 +78,15 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     # For visualization purpose, we will also normalize the heatmap between 0 & 1
     heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
     return heatmap.numpy()
-def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.8):
+
+def save_and_display_gradcam(img, heatmap, cam_path="cam.jpg", alpha=0.8):
     # Load the original image
-    img = keras.preprocessing.image.load_img(img_path)
+    # img = keras.preprocessing.image.load_img(img_path)
     # img.show()
-    img = keras.preprocessing.image.img_to_array(img)
+    # img = keras.preprocessing.image.img_to_array(img)
+    img=tf.convert_to_tensor(img)
+    # img=tf.expand_dims(img,axis=0)
+    
     img = normalization_layer(img)
 
     # Rescale heatmap to a range 0-255
@@ -110,11 +114,12 @@ def save_and_display_gradcam(img_path, heatmap, cam_path="cam.jpg", alpha=0.8):
 
     # superimposed_img.save(cam_path)
 
-    return keras.preprocessing.image.load_img(img_path),superimposed_img
+    return tf.keras.utils.array_to_img(img),superimposed_img
 
 
 import matplotlib.ticker as ticker
 def get_concat_h(im,im1, im2,im3):
+    
     dst = Image.new('RGB', (im.width+im1.width + im2.width+im3.width, im1.height))
     dst.paste(im, (0, 0))
     dst.paste(im1, (im1.width, 0))
@@ -125,13 +130,16 @@ import io
 import PIL
 from PIL import Image
 import matplotlib.pyplot as plt
-def grad_cam_single(image_path,img_size,image,m_width,m_height,conv_with_multiplied_weight):
+def grad_cam_single(img_1,img_size,image,m_width,m_height,conv_with_multiplied_weight):
   # global image_path
   # image = Image.open(image_path)
   # image= image.resize(img_size,Image.BICUBIC)
+ 
   image1 =tf.convert_to_tensor(image)
+  
   image1 = normalization_layer(image1)
   image1 = tf.cast(image1, tf.float32)*1./255
+  
   cam = make_gradcam_heatmap(tf.expand_dims(image1, axis=0), model, conv_with_multiplied_weight)
   plt.figure(figsize=(3.5, 3.5))
   # plt.axis('off')
@@ -151,7 +159,7 @@ def grad_cam_single(image_path,img_size,image,m_width,m_height,conv_with_multipl
   # st.image(img1,width=224)
 
   # plt.show()
-  real,superimposed_img = save_and_display_gradcam(image_path, cam,alpha=1.0)
+  real,superimposed_img = save_and_display_gradcam(img_1, cam,alpha=1.0)
   cam_n = Image.fromarray(np.uint8(cm.gist_earth(cam)*255))
   cam_n= cam_n.resize(img_size,Image.BICUBIC)
   img1= img1.resize(img_size,Image.BICUBIC)
@@ -160,10 +168,12 @@ def grad_cam_single(image_path,img_size,image,m_width,m_height,conv_with_multipl
   return dist
 
 
-def gradCamOutput(image_path,model,image,img_size):
+def gradCamOutput(img1,model,image,img_size):
   conv_with_multiplied_weight = model.layers[-4].name
   m_width,m_height = model.layers[-4].output_shape[1:3]
-  out=grad_cam_single(image_path,img_size,image,m_width,m_height,conv_with_multiplied_weight)
+  
+  out=grad_cam_single(img1,img_size,image,m_width,m_height,conv_with_multiplied_weight)
+
   st.image(out,channels='RGB')
   
 
@@ -177,13 +187,13 @@ def load_proposed(path1,path2):
 def localmobileattenModel():
     #cardamom #v2s
     model_name='Mobileattenlocal'
-    model=load_proposed('/content/drive/MyDrive/Main_Project/obj_reco/local_model.json','/content/drive/MyDrive/Main_Project/Proposed_files/tst_local30_model.h5')
+    model=load_proposed(root+'obj_reco/local_model.json',root+'obj_reco/tst_local_model.h5')
     return model_name,model
 
 @st.cache_resource
 def publicmobileattenloadModel():
     model_name='Mobileattenpublic'
-    model=load_proposed('/content/drive/MyDrive/Main_Project/obj_reco/public_model.json','/content/drive/MyDrive/Main_Project/obj_reco/tst_public_model.h5')
+    model=load_proposed(root+'obj_reco/public_model.json',root+'obj_reco/tst_public_model.h5')
     return model_name,model
 
 
@@ -250,9 +260,11 @@ def upload_predict(file,upload_image, model,modelsize,classes,model_name):
         #image = ImageOps.fit(upload_image, size, Image.ANTIALIAS)
         #image = np.asarray(image)
         #img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        img_resize = cv2.resize(upload_image, dsize=modelsize,interpolation=cv2.INTER_CUBIC)
+        # img_resize = cv2.resize(upload_image, dsize=modelsize,interpolation=cv2.INTER_CUBIC)
+        img_resize=upload_image
+        
         st.image(img_resize, width=224)
-        gradCamOutput(file,model,image,modelsize)
+        gradCamOutput(img_resize,model,image,modelsize)
         #img_reshape = img_resize[np.newaxis,...]
         normalization_layer = tf.keras.layers.experimental.preprocessing.Normalization(mean=[103.939, 116.779, 123.68],variance=[1,1,1])
         img=tf.convert_to_tensor(img_resize)
@@ -261,10 +273,10 @@ def upload_predict(file,upload_image, model,modelsize,classes,model_name):
         img=img*1./255
         prediction = model.predict(img)
         prediction=tf.argmax(prediction,axis=1)
-        print(prediction)
+        
 
         st.markdown('<p style="font-size:2em;">PREDICTIONS : <span style="color:red;font-size:2em;"> '+classes[prediction.numpy()[0]]+'</span></p>', unsafe_allow_html=True)
-        st.write('prediction = ',classes[prediction.numpy()[0]],model_name)
+        # st.write('prediction = ',classes[prediction.numpy()[0]],model_name)
         return prediction.numpy()[0]
     
 
@@ -310,7 +322,7 @@ if project == "Predictors":
                 progress.progress(i+1)
             # masked = cv2.resize(masked,(width_temp,height_temp))
             #output = samplePrediction(model,masked,predictorClasses,height,width)
-            image_class = upload_predict(file,image, model,modelsize,predictorClasses,model_name)
+            image_class = upload_predict(file.name,image, model,modelsize,predictorClasses,model_name)
 
         if clr:
             prediction_label = ''
