@@ -201,7 +201,7 @@ def loading():
     with st.spinner("Loading..."):
         time.sleep(1)
 
-project = st.sidebar.radio("Dashboard",["Predictors"])
+project = st.sidebar.radio("Dashboard",["PREDICTORS","OUTPUT"])
 
 # if project == "About":
 #     with st.spinner("Loading..."):
@@ -280,7 +280,44 @@ def upload_predict(file,upload_image, model,modelsize,classes,model_name):
         return prediction.numpy()[0]
     
 
-if project == "Predictors":
+if project == "OUTPUT":
+    loading()
+    navig = st.sidebar.radio("Available outputs",["Mobile-Atten outputs","Comparison outputs"])
+    if navig=='Mobile-Atten outputs':
+        st.title("OUTPUT")
+        img_tablel = Image.open(root+'output/localmatable.jpg')
+        img_cml = Image.open(root+'output/localmacm.png')
+        img_rocl = Image.open(root+'output/localmaroc.png')
+        st.markdown('<p style="font-size:2em;">Local dataset</p>', unsafe_allow_html=True)
+        st.image(img_tablel)
+        st.image(img_cml)
+        st.image(img_rocl)
+        img_tablep= Image.open(root+'output/publicmatable.jpg')
+        img_cmp= Image.open(root+'output/publicmacm.png')
+        img_rocp= Image.open(root+'output/publicmaroc.png')
+        st.markdown('<p style="font-size:2em;">Public dataset</p>', unsafe_allow_html=True)
+        st.image(img_tablep)
+        st.image(img_cmp)
+        st.image(img_rocp)
+
+    if navig=='Comparison outputs':
+        st.title("OUTPUT")
+        image = Image.open(root+'output/publiccomp.png')
+        st.markdown('<p style="font-size:2em;">Local Comparison model</p>', unsafe_allow_html=True)
+        st.image(image)
+        image1= Image.open(root+'output/localcomp.jpg')
+        st.markdown('<p style="font-size:2em;">Public Comparison model</p>', unsafe_allow_html=True)
+        st.image(image1)
+
+   
+
+
+
+
+
+
+
+if project == "PREDICTORS":
     loading()
     navig = st.sidebar.radio("Available Disease Predictor",["Local dataset Predictor","Public dataset Predictor"])
     predictorClasses =localClasses
