@@ -313,13 +313,14 @@ if project == "OUTPUT":
         st.image(image1)
     if navig=='Tensorboard outputs':
         st.markdown('<p style="font-size:2em;">Stage 1, local dataset</p>', unsafe_allow_html=True)
-        st_tensorboard(logdir=root+'obj_reco/stage1/local', port=6006)
+        st_tensorboard(logdir=root+'obj_reco/stage1/local',url='https://tensorboard.dev/experiment/SZmO89JNSletbHpv5Jb18w')
         st.markdown('<p style="font-size:2em;">Stage 2, local dataset</p>', unsafe_allow_html=True)
-        st_tensorboard(logdir=root+'obj_reco/stage2/local', port=6006)
+        st_tensorboard(logdir=root+'obj_reco/stage2/local', url='https://tensorboard.dev/experiment/irLlmt4GQhaV1iMsV7hrbw')
         st.markdown('<p style="font-size:2em;">Stage 1, public dataset</p>', unsafe_allow_html=True)
-        st_tensorboard(logdir=root+'obj_reco/stage1/public', port=6006)
+        st_tensorboard(logdir=root+'obj_reco/stage1/public', url='https://tensorboard.dev/experiment/1UMtmPVxRT63CP9lBOCncQ')
         st.markdown('<p style="font-size:2em;">Stage 2, public dataset</p>', unsafe_allow_html=True)
-        st_tensorboard(logdir=root+'obj_reco/stage2/public', port=6006)
+        st_tensorboard(logdir=root+'obj_reco/stage2/public', url='https://tensorboard.dev/experiment/DTnoFozLTXyB2pFp3bSMmA')
+
 
    
 
