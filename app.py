@@ -312,7 +312,14 @@ if project == "OUTPUT":
         st.markdown('<p style="font-size:2em;">Public Comparison model</p>', unsafe_allow_html=True)
         st.image(image1)
     if navig=='Tensorboard outputs':
+        st.markdown('<p style="font-size:2em;">Stage 1, local dataset</p>', unsafe_allow_html=True)
         st_tensorboard(logdir=root+'obj_reco/stage1/local', port=6006)
+        st.markdown('<p style="font-size:2em;">Stage 2, local dataset</p>', unsafe_allow_html=True)
+        st_tensorboard(logdir=root+'obj_reco/stage2/local', port=6006)
+        st.markdown('<p style="font-size:2em;">Stage 1, public dataset</p>', unsafe_allow_html=True)
+        st_tensorboard(logdir=root+'obj_reco/stage1/public', port=6006)
+        st.markdown('<p style="font-size:2em;">Stage 2, public dataset</p>', unsafe_allow_html=True)
+        st_tensorboard(logdir=root+'obj_reco/stage2/public', port=6006)
 
    
 
