@@ -312,13 +312,16 @@ if project == "OUTPUT":
         st.markdown('<p style="font-size:2em;">Public Comparison model</p>', unsafe_allow_html=True)
         st.image(image1)
     if navig=='Tensorboard outputs':
-        st.markdown('<p style="font-size:2em;">Stage 1, local dataset</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">TENSORBOARD OUTPUTS</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">----LOCAL DATASET----</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">STAGE 1</p>', unsafe_allow_html=True)
         st_tensorboard(logdir=root+'obj_reco/stage1/local',url='https://tensorboard.dev/experiment/SZmO89JNSletbHpv5Jb18w')
-        st.markdown('<p style="font-size:2em;">Stage 2, local dataset</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">STAGE 2</p>', unsafe_allow_html=True)
         st_tensorboard(logdir=root+'obj_reco/stage2/local', url='https://tensorboard.dev/experiment/irLlmt4GQhaV1iMsV7hrbw')
-        st.markdown('<p style="font-size:2em;">Stage 1, public dataset</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">----PUBLIC DATASET----</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">STAGE 1</p>', unsafe_allow_html=True)
         st_tensorboard(logdir=root+'obj_reco/stage1/public', url='https://tensorboard.dev/experiment/1UMtmPVxRT63CP9lBOCncQ')
-        st.markdown('<p style="font-size:2em;">Stage 2, public dataset</p>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size:2em;">STAGE 2</p>', unsafe_allow_html=True)
         st_tensorboard(logdir=root+'obj_reco/stage2/public', url='https://tensorboard.dev/experiment/DTnoFozLTXyB2pFp3bSMmA')
 
 
