@@ -54,6 +54,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
     # Then, we compute the gradient of the top predicted class for our input image
     # with respect to the activations of the last conv layer
     with tf.GradientTape() as tape:
+        print(img_array.shape,type(img_array))
         last_conv_layer_output, preds = grad_model(img_array)
         if pred_index is None:
             pred_index = tf.argmax(preds[0])
@@ -136,7 +137,7 @@ def grad_cam_single(img_1,img_size,image,m_width,m_height,conv_with_multiplied_w
   # image= image.resize(img_size,Image.BICUBIC)
  
   image1 =tf.convert_to_tensor(image)
-  
+  image1=tf.image.resize(image1,img_size)
   image1 = normalization_layer(image1)
   image1 = tf.cast(image1, tf.float32)*1./255
   
@@ -268,6 +269,7 @@ def upload_predict(file,upload_image, model,modelsize,classes,model_name):
         #img_reshape = img_resize[np.newaxis,...]
         normalization_layer = tf.keras.layers.experimental.preprocessing.Normalization(mean=[103.939, 116.779, 123.68],variance=[1,1,1])
         img=tf.convert_to_tensor(img_resize)
+        img=tf.image.resize(img,modelsize)
         img=tf.expand_dims(img,axis=0)
         img=normalization_layer(img)
         img=img*1./255
