@@ -11,6 +11,7 @@ import tensorflow.keras as keras
 import os
 import time
 from PIL import Image,ImageOps
+from streamlit_tensorboard import st_tensorboard
 # root='/content/drive/MyDrive/Main_Project/'
 root='./'
 st.set_page_config(layout="wide")
@@ -284,7 +285,7 @@ def upload_predict(file,upload_image, model,modelsize,classes,model_name):
 
 if project == "OUTPUT":
     loading()
-    navig = st.sidebar.radio("Available outputs",["Mobile-Atten outputs","Comparison outputs"])
+    navig = st.sidebar.radio("Available outputs",["Mobile-Atten outputs","Comparison outputs","Tensorboard outputs"])
     if navig=='Mobile-Atten outputs':
         st.title("OUTPUT")
         img_tablel = Image.open(root+'output/localmatable.jpg')
@@ -310,6 +311,8 @@ if project == "OUTPUT":
         image1= Image.open(root+'output/localcomp.jpg')
         st.markdown('<p style="font-size:2em;">Public Comparison model</p>', unsafe_allow_html=True)
         st.image(image1)
+    if navig=='Tensorboard outputs':
+        st_tensorboard(logdir=root+'obj_reco/stage1/local', port=6006)
 
    
 
