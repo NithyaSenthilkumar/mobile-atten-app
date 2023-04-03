@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 
-def st_tensorboard(logdir="/logs/", url='', width=None, height=800, scrolling=True):
+def st_tensorboard(logdir="/logs/", url='', width=None, height=800, scrolling=False):
     """Embed Tensorboard within a Streamlit app
     Parameters
     ----------
